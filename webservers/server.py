@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from bottle import Bottle, run, request, auth_basic, response, abort
+import json
 
 app = Bottle()
 
@@ -47,6 +48,14 @@ def cook():
         return "You are a valid user"
     else:
         abort(401, "Access denied")
+
+
+@app.route('/json')
+def json_data():
+    if request.get_cookie("authenticated") == "yes":
+        return json.dumps({"error": False})
+    else:
+        return json.dumps({"error": True, "message": "You are not authorized"})
 
 
 if __name__ == "__main__":
